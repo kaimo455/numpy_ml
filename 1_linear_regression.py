@@ -57,7 +57,7 @@ class LinearRegression:
 if __name__ == '__main__':
     lr = LinearRegression()
     X, Y = lr.load_data()
-    loss_list, W, b = lr.train(X, Y, 1e-3, int(1e6))
+    loss_list, W, b = lr.train(X, Y, 1e-2, int(1e5))
     plt.plot(loss_list)
     plt.xlabel('epoch')
     plt.ylabel('loss')
