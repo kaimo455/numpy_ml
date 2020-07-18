@@ -79,6 +79,9 @@ class CARTTree:
 
     @staticmethod
     def _split_data(df, col):
+        # TODO: CART is binary tree, the _split_data() method is wrong. It should be:
+        #   categorical feature -> create True/False branches
+        #   continuous feature -> create less/larger than branches
         """
         Split DataFrame base on different value on column.
         :param df: data DataFrame
