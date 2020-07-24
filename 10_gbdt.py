@@ -148,8 +148,6 @@ General Gradient Boosting Decision Tree(GBDT).
 class GBDT:
     """Super class of regression GBDT and classification GBDT."""
 
-    # TODO: implement the classification version
-
     def __init__(self, n_estimators=100, learning_rate=1e-2, max_depth=None, min_samples_split=2, min_gain=1e-7,
                  row_subsample=None):
         self.n_estimators = n_estimators
@@ -172,12 +170,14 @@ class GBDT:
         self.estimators.append(base_estimator)
         y_pred = base_estimator.predict(X)
         # rest estimators
-        for i in tqdm(range(1, self.n_estimators)):
+        for _ in tqdm(range(1, self.n_estimators)):
             base_estimator = self.BaseEstimator(max_depth=self.max_depth, min_samples_split=self.min_samples_split,
                                                 min_gain=self.min_gain)
             sample_idx = np.random.choice(X.shape[0], int(self.row_subsample * X.shape[0]), replace=False)
+            # fit the tree on sampled X, and negative gradient of loss function w.r.t. previous step's y_pred
             base_estimator.fit(X[sample_idx], -self.loss_obj.gradient(y_true=y, y_pred=y_pred)[sample_idx])
             self.estimators.append(base_estimator)
+            # update y_pred for this step
             y_pred += self.learning_rate * base_estimator.predict(X)
 
     def predict(self, X):
@@ -196,6 +196,16 @@ class GBDTRegressor(GBDT):
     def __init__(self, **kwargs):
         super(GBDTRegressor, self).__init__(**kwargs)
         self.loss_obj = SquareLoss()
+
+
+"""
+Classification GBDT.
+"""
+
+
+class GBDTClassifier(GBDT):
+    def __init__(self, **kwargs):
+        raise NotImplementedError()
 
 
 """
