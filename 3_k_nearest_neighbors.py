@@ -29,7 +29,9 @@ class KNearestNeighbor:
     def predict(self, X, k=1):
         dists = self._compute_dist(X)
         indices = np.argsort(dists, axis=-1)[:, :k]
-        Y_closest = np.take_along_axis(np.broadcast_to(self.Y_train, (X.shape[0], self.Y_train.shape[0])), indices,
+        num_test, num_train = X.shape[0], self.Y_train.shape[0]
+        Y_closest = np.take_along_axis(np.broadcast_to(self.Y_train, (num_test, num_train)), 
+                                       indices,
                                        axis=-1)
         Y_pred = np.apply_along_axis(lambda arr: Counter(arr).most_common(1)[0][0], -1, Y_closest)
         return Y_pred
