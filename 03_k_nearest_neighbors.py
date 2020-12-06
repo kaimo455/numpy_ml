@@ -27,8 +27,8 @@ class KNearestNeighbor:
         return dists
 
     def predict(self, X, k=1):
-        dists = self._compute_dist(X)
-        indices = np.argsort(dists, axis=-1)[:, :k]
+        dists = self._compute_dist(X)  # [NUM_TEST, NUM_TRAIN]
+        indices = np.argsort(dists, axis=-1)[:, :k]  # [NUM_TEST, K]
         num_test, num_train = X.shape[0], self.Y_train.shape[0]
         Y_closest = np.take_along_axis(np.broadcast_to(self.Y_train, (num_test, num_train)), 
                                        indices,
