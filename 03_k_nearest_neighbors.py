@@ -19,7 +19,7 @@ class KNearestNeighbor:
         for one test sample and all training samples pair, use matrix to calculate:
             dist = np.sqrt(np.sum((X_train - x_j)**2, axis=-1)).reshape(1, -1)
         for all train-test sample pairs, use matrix to calculate:
-            dist = np.sum(X_test**2, axis=-1)[:, np.newaxis] + np.sum(X_train**2, axis=-1)[:, np.newaxis].T - 2*X_test*X_train.T
+            dist = np.sum(X_test**2, axis=-1)[:, np.newaxis] + np.sum(X_train**2, axis=-1)[:, np.newaxis].T - 2*np.dot(X_test, X_train.T)
         """
 
         dists = np.sum(X ** 2, axis=-1).reshape(-1, 1) + np.sum(self.X_train ** 2, axis=-1).reshape(1, -1) \
